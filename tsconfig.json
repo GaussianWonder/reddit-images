@@ -4,13 +4,14 @@
     "target": "ES2022",
     "strict": true,
     "importHelpers": true,
+    "resolveJsonModule": true,
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "dist"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"]
 }

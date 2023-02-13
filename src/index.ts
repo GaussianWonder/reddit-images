@@ -1,1 +1,3 @@
-console.log("IT WORKS");
+import config from "./config";
+
+console.log(config);
