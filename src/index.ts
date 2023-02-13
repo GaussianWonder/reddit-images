@@ -1,3 +1,4 @@
-import config from "./config";
+import config from './config';
+import requester from './requester';
 
-console.log(config);
+console.log(requester, config);

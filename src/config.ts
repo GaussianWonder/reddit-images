@@ -1,6 +1,7 @@
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
 import z from 'zod';
 import oauth from '../oauth.json';
+import UserAgent from 'user-agents';
 
 const envConfig = dotenv.config();
 const envFile = envConfig.parsed;
@@ -9,13 +10,16 @@ if (envConfig.error)
 
 const ConfigSchema = z.object({
   oauth: z.object({
-    accessToken: z.string().min(1).default(envFile?.ACCESS_TOKEN ?? ''),
-    tokenType: z.enum(["bearer"]).optional().default('bearer'),
+    accessToken: z
+      .string()
+      .min(1)
+      .default(envFile?.ACCESS_TOKEN ?? ''),
+    tokenType: z.enum(['bearer']).optional().default('bearer'),
     expiresIn: z.number().min(0).optional().default(0),
     scope: z.string().optional(),
   }),
   clientId: z.string().min(1),
-  appSecret: z.string().min(1),
+  clientSecret: z.string().min(1),
 });
 
 const config = ConfigSchema.parse({
@@ -26,9 +30,11 @@ const config = ConfigSchema.parse({
     scope: oauth.scope,
   },
   clientId: envFile?.CLIENT_ID,
-  appSecret: envFile?.APP_SECRET,
+  clientSecret: envFile?.CLIENT_SECRET,
 });
 
 console.log('Parsed config:\n', config);
 
-export default config;
+const userAgent = new UserAgent();
+
+export default { ...config, userAgent };
