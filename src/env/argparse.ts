@@ -11,6 +11,11 @@ const parsedArgs = parseArgs({
       short: 'h',
       default: false,
     },
+    debug: {
+      type: 'boolean',
+      short: 'd',
+      default: false,
+    },
   },
   allowPositionals: true,
 });

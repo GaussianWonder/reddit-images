@@ -39,8 +39,10 @@ const config = ConfigSchema.parse({
   },
 });
 
-console.log('Parsed config:\n', config);
-
 const userAgent = new UserAgent();
 
-export default { ...config, userAgent };
+export default {
+  ...config,
+  userAgent: userAgent.toString(),
+  realUserAgent: 'crawler:GaussianGather:0.0.1 by u/GaussianWonder',
+};

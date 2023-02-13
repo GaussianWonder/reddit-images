@@ -1,5 +1,20 @@
-import { selectedSubreddits } from './env/argparse';
+import { args, selectedSubreddits } from './env/argparse';
 import config from './env/config';
+import { initScraper, Scraper } from './scrape/requester';
 
-console.log(config);
-console.log(selectedSubreddits);
+if (args.debug) {
+  console.log('Selected subreddits: ', selectedSubreddits);
+  console.log('Config: ', config);
+}
+
+let scraper: Scraper | null = null;
+
+async function promiseLand() {
+  scraper = await initScraper(selectedSubreddits);
+}
+
+promiseLand();
+
+process.on('SIGINT', () => {
+  scraper?.cleanup();
+});
