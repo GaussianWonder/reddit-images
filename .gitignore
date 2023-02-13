@@ -2,3 +2,5 @@ node_modules/*
 dist/*
 .env
 oauth.json
+*.sqlite
+**/.snapshot-*.json

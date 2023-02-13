@@ -1,6 +1,9 @@
 import { exit } from 'node:process';
 import { parseArgs } from 'node:util';
 
+export const DEFAULT_DB_NAME = 'reddit_media';
+export const DEFAULT_DB_PATH = `./${DEFAULT_DB_NAME}.db`;
+
 const parsedArgs = parseArgs({
   options: {
     help: {

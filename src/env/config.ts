@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import z from 'zod';
-import oauth from '../oauth.json';
+import oauth from '../../oauth.json';
 import UserAgent from 'user-agents';
 
 const envConfig = dotenv.config();
@@ -20,6 +20,9 @@ const ConfigSchema = z.object({
   }),
   clientId: z.string().min(1),
   clientSecret: z.string().min(1),
+  database: z.object({
+    name: z.string().min(1),
+  }),
 });
 
 const config = ConfigSchema.parse({
@@ -31,6 +34,9 @@ const config = ConfigSchema.parse({
   },
   clientId: envFile?.CLIENT_ID,
   clientSecret: envFile?.CLIENT_SECRET,
+  database: {
+    name: envFile?.DATABASE_NAME,
+  },
 });
 
 console.log('Parsed config:\n', config);

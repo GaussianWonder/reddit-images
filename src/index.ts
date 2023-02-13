@@ -1,5 +1,5 @@
-import { selectedSubreddits } from './argparse';
-import config from './config';
+import { selectedSubreddits } from './env/argparse';
+import config from './env/config';
 
 console.log(config);
 console.log(selectedSubreddits);

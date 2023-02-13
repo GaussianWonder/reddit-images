@@ -1,4 +1,4 @@
-import config from './config';
+import config from '../env/config';
 import snoowrap from 'snoowrap';
 
 export const acquireRequester = () =>
