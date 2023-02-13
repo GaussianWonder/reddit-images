@@ -1,4 +1,5 @@
+import { selectedSubreddits } from './argparse';
 import config from './config';
-import requester from './requester';
 
-console.log(requester, config);
+console.log(config);
+console.log(selectedSubreddits);
