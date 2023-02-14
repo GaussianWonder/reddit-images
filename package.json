@@ -45,7 +45,6 @@
     "@mikro-orm/reflection": "^5.6.9",
     "@mikro-orm/sqlite": "^5.6.9",
     "dotenv": "^16.0.3",
-    "image-type": "^5.2.0",
     "inversify": "^6.0.1",
     "probe-image-size": "^7.2.3",
     "reddit-oauth-helper": "^0.3.2",

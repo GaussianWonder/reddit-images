@@ -5,7 +5,7 @@ import {
   Media,
 } from 'snoowrap/dist/objects/Submission';
 import { MediaSource, RawMedia } from './../database/entities/media.entity';
-import { fastImageDetails, fastImageMimeType } from './logic';
+import { fastImageDetails } from './logic';
 import { isImagePreview, isImageSource, isURL } from './validation';
 
 type MediaAlike = ImagePreview | ImagePreviewSource | Media | string;
@@ -30,7 +30,7 @@ async function resolveMediaAlike(
     // value is a valid ImagePreviewSource structure
     const { url, width, height } = value;
     if (forceImageDetailsFetching) {
-      const mimetype = await fastImageMimeType(url);
+      const { mimetype } = await fastImageDetails(url);
       return [{ url, width, height, mimetype }];
     }
     return [{ url, width, height, mimetype: null }];
