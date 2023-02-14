@@ -1,7 +1,6 @@
 import { SubredditScraperEntity } from './../database/entities/subreddit-scraper.entity';
 import { MediaEntity } from './../database/entities/media.entity';
 import Snoowrap from 'snoowrap';
-import { scheduleJob, Job } from 'node-schedule';
 import { EntityRepository } from '@mikro-orm/sqlite';
 import { inject } from 'inversify';
 import TYPES from '../di';

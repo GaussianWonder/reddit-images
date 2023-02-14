@@ -1,7 +1,6 @@
 import * as dotenv from 'dotenv';
 import z from 'zod';
 import oauth from '../../oauth.json';
-import UserAgent from 'user-agents';
 
 const envConfig = dotenv.config();
 const envFile = envConfig.parsed;
@@ -23,6 +22,7 @@ const ConfigSchema = z.object({
   database: z.object({
     name: z.string().min(1),
   }),
+  userAgent: z.string().min(1),
 });
 
 const config = ConfigSchema.parse({
@@ -37,12 +37,7 @@ const config = ConfigSchema.parse({
   database: {
     name: envFile?.DATABASE_NAME,
   },
+  userAgent: envFile?.USER_AGENT,
 });
 
-const userAgent = new UserAgent();
-
-export default {
-  ...config,
-  userAgent: userAgent.toString(),
-  realUserAgent: 'crawler:GaussianGather:0.0.1 by u/GaussianWonder',
-};
+export default { ...config };

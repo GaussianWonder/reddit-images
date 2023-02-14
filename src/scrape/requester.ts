@@ -4,7 +4,7 @@ import { args } from '../env/argparse';
 
 export const acquireRequester = () => {
   const instance = new Snoowrap({
-    userAgent: config.realUserAgent,
+    userAgent: config.userAgent,
     clientId: config.clientId,
     clientSecret: config.clientSecret,
     accessToken: config.oauth.accessToken,
