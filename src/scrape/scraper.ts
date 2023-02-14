@@ -18,7 +18,9 @@ class SubredditScraper {
   private mediaRepository!: EntityRepository<MediaEntity>;
 
   constructor(
+    // eslint-disable-next-line no-unused-vars
     public readonly subreddit: SubredditScraperEntity,
+    // eslint-disable-next-line no-unused-vars
     private readonly scraper: Snoowrap.Subreddit,
   ) {}
 
