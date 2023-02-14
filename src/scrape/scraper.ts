@@ -1,8 +1,9 @@
+import { getScraper, getSubredditScraper } from './../inversify.config';
 import { SubredditScraperEntity } from './../database/entities/subreddit-scraper.entity';
 import { MediaEntity } from './../database/entities/media.entity';
 import Snoowrap from 'snoowrap';
 import { EntityRepository } from '@mikro-orm/sqlite';
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
 import TYPES from '../di';
 import { getSubredditRepository } from '../inversify.config';
 import { makeAbortable } from './logic';
@@ -10,19 +11,26 @@ import { args } from '../env/argparse';
 import { ListingOptions } from 'snoowrap/dist/objects';
 import { extractPostMedia } from './post';
 
-class SubredditScraper {
+@injectable()
+export class SubredditScraper {
+  @inject(TYPES.Requester)
+  private scraper!: Snoowrap;
+
   @inject(TYPES.SubredditRepository)
   private subredditRepository!: EntityRepository<SubredditScraperEntity>;
 
   @inject(TYPES.MediaRepository)
   private mediaRepository!: EntityRepository<MediaEntity>;
 
-  constructor(
-    // eslint-disable-next-line no-unused-vars
-    public readonly subreddit: SubredditScraperEntity,
-    // eslint-disable-next-line no-unused-vars
-    private readonly scraper: Snoowrap.Subreddit,
-  ) {}
+  public subreddit!: SubredditScraperEntity;
+
+  private get srScraper() {
+    return this.scraper.getSubreddit(this.subreddit.subreddit_name);
+  }
+
+  public init(subreddit: SubredditScraperEntity) {
+    this.subreddit = subreddit;
+  }
 
   public scrape() {
     return makeAbortable(this.handleNextSubmissions());
@@ -36,13 +44,13 @@ class SubredditScraper {
 
     switch (this.subreddit.listing_type) {
       case 'hot':
-        return this.scraper.getHot(listingOpts);
+        return await this.srScraper.getHot(listingOpts);
       case 'new':
-        return this.scraper.getNew(listingOpts);
+        return await this.srScraper.getNew(listingOpts);
       case 'top':
-        return this.scraper.getTop(listingOpts);
+        return await this.srScraper.getTop(listingOpts);
       case 'rising':
-        return this.scraper.getRising(listingOpts);
+        return await this.srScraper.getRising(listingOpts);
       default:
         return Promise.reject([]);
     }
@@ -83,7 +91,8 @@ class SubredditScraper {
       );
 
     // Update the subreddit entity
-    this.subreddit.after = lastId;
+    // TODO fix t3_null and signal that this scraper can no longer be scraped from
+    this.subreddit.after = `t3_${lastId}`;
     const currentBatchIndex = this.subreddit.iterations % 1000;
     this.subreddit.iterations += submissions.length;
     const nextBatchIndex = this.subreddit.iterations % 1000;
@@ -99,21 +108,15 @@ class SubredditScraper {
   }
 }
 
+@injectable()
 export class Scraper {
-  @inject(TYPES.Requester)
-  private requester!: Snoowrap;
-
   public abortController = new AbortController();
 
-  private readonly subredditScrapers: SubredditScraper[];
+  private subredditScrapers: SubredditScraper[] = [];
 
-  constructor(srsToScrape: SubredditScraperEntity[]) {
-    this.subredditScrapers = srsToScrape.map(
-      (subreddit) =>
-        new SubredditScraper(
-          subreddit,
-          this.requester.getSubreddit(subreddit.subreddit_name),
-        ),
+  public init(srsToScrape: SubredditScraperEntity[]) {
+    this.subredditScrapers = srsToScrape.map((subreddit) =>
+      getSubredditScraper(subreddit),
     );
   }
 
@@ -139,18 +142,28 @@ export class Scraper {
 
 export async function initScraper(subredditNames: string[]): Promise<Scraper> {
   const subredditRepo = getSubredditRepository();
-  const subreddits = await subredditRepo.find({
+
+  const queryParams = {
     subreddit_name: {
       $in: subredditNames,
     },
     listing_type: args.listing_type,
+  };
+  const subreddits = await subredditRepo.find({
+    ...queryParams,
     iterations: { $lte: 1000 },
+  });
+  const constrainedSubreddits = await subredditRepo.find({
+    ...queryParams,
+    iterations: { $gt: 1000 },
   });
 
   const newSubreddits = subredditNames
     .filter(
       (name) =>
-        !subreddits.some(({ subreddit_name }) => subreddit_name === name),
+        !constrainedSubreddits.some(
+          ({ subreddit_name }) => subreddit_name === name,
+        ) && !subreddits.some(({ subreddit_name }) => subreddit_name === name),
     )
     .map((name) =>
       subredditRepo.create({
@@ -161,5 +174,5 @@ export async function initScraper(subredditNames: string[]): Promise<Scraper> {
 
   await subredditRepo.persistAndFlush(newSubreddits);
 
-  return new Scraper(subreddits.concat(newSubreddits));
+  return getScraper(subreddits.concat(newSubreddits));
 }

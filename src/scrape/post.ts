@@ -1,5 +1,5 @@
 import { Submission } from 'snoowrap';
-import {
+import type {
   ImagePreview,
   ImagePreviewSource,
   Media,
@@ -52,7 +52,7 @@ const mediaOr = async (value: MediaAlike, or: MediaSource[]) => {
   try {
     return await resolveMediaAlike(value);
   } catch (error) {
-    console.error(error);
+    console.error('Error parsing media', error);
     return or;
   }
 };
@@ -60,12 +60,14 @@ const mediaOr = async (value: MediaAlike, or: MediaSource[]) => {
 /**
  * Specialized version of mediaOr
  */
-const mediaOrEmpty = async (value: MediaAlike) => mediaOr(value, []);
+const mediaOrEmpty = (value: MediaAlike) => mediaOr(value, []);
 
 export async function extractPostMedia(post: Submission): Promise<RawMedia[]> {
   // any of url, media[], preview.images[], thumbnail, url_overridden_by_dest
+  if (!post || !post.preview || !post.preview.images) return [];
   const sources: MediaAlike[] = [...post.preview.images];
   const parsedSources = await Promise.all(sources.map(mediaOrEmpty));
+
   return parsedSources
     .filter((source) => source.length > 0)
     .flat()
@@ -78,5 +80,6 @@ export async function extractPostMedia(post: Submission): Promise<RawMedia[]> {
       ups: post.ups,
       downs: post.downs,
       score: post.score,
+      content_categories: (post?.content_categories ?? []).join(','),
     }));
 }

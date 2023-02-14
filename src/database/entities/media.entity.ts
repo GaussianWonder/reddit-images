@@ -13,6 +13,7 @@ export interface RawMedia {
   ups: number;
   downs: number;
   score: number;
+  content_categories: string;
 }
 
 export type MediaSource = Pick<
@@ -54,6 +55,11 @@ export class MediaEntity extends BaseEntity implements RawMedia {
     columnType: 'varchar(128)',
   })
   post_hint!: string;
+
+  @Property({
+    columnType: 'varchar(128)',
+  })
+  content_categories!: string;
 
   @Property({
     columnType: 'varchar(128)',

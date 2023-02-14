@@ -7,7 +7,7 @@
     "oauth": "npx reddit-oauth-helper",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc -p .",
-    "start": "npm run build && node dist/src/index.js",
+    "start": "npm run build && node dist/index.js",
     "migration:create": "npx mikro-orm migration:create",
     "migration:up": "npx mikro-orm migration:up",
     "migration:down": "npx mikro-orm migration:down",
@@ -21,7 +21,7 @@
     "useTsNode": true,
     "configPaths": [
       "./src/database/config.ts",
-      "./dist/src/database/config.js"
+      "./dist/database/config.js"
     ]
   },
   "devDependencies": {

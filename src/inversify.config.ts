@@ -6,8 +6,14 @@ import { MediaEntity } from './database/entities/media.entity';
 import { SubredditScraperEntity } from './database/entities/subreddit-scraper.entity';
 import TYPES from './di';
 import { acquireRequester } from './scrape/requester';
+import { Scraper, SubredditScraper } from './scrape/scraper';
 
-const container = new Container();
+const container = new Container({
+  autoBindInjectable: true,
+  defaultScope: 'Singleton',
+});
+
+export { container };
 
 export async function initDI() {
   const [r, orm] = await Promise.all([acquireRequester(), initORM()]);
@@ -20,11 +26,11 @@ export async function initDI() {
   container
     .bind<EntityRepository<MediaEntity>>(TYPES.MediaRepository)
     .toConstantValue(orm.em.getRepository(MediaEntity));
+  container.bind<Scraper>(Scraper).toSelf();
+  container.bind<SubredditScraper>(SubredditScraper).toSelf();
 
   return container;
 }
-
-export { container };
 
 export const getSubredditRepository = () =>
   container.get<EntityRepository<SubredditScraperEntity>>(
@@ -35,3 +41,15 @@ export const getMediaRepository = () =>
   container.get<EntityRepository<MediaEntity>>(TYPES.MediaRepository);
 
 export const getRequester = () => container.get<Snoowrap>(TYPES.Requester);
+
+export const getScraper = (subredditEntities: SubredditScraperEntity[]) => {
+  const scraper = container.get<Scraper>(Scraper);
+  scraper.init(subredditEntities);
+  return scraper;
+};
+
+export const getSubredditScraper = (subreddit: SubredditScraperEntity) => {
+  const subredditScraper = container.get<SubredditScraper>(SubredditScraper);
+  subredditScraper.init(subreddit);
+  return subredditScraper;
+};

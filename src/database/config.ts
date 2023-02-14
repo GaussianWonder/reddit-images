@@ -6,11 +6,11 @@ import config from '../env/config';
 
 export const MigroORMConfig: Options<SqliteDriver> = defineConfig({
   metadataProvider: TsMorphMetadataProvider,
-  entities: ['./dist/src/database/entities'],
+  entities: ['./dist/database/entities'],
   entitiesTs: ['./src/database/entities'],
   migrations: {
     tableName: 'migrations',
-    path: './dist/src/database/migrations',
+    path: './dist/database/migrations',
     pathTs: './src/database/migrations',
     glob: '!(*.d).{js,ts}',
     transactional: true,
