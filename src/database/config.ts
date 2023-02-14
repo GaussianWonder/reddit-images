@@ -23,6 +23,11 @@ export const MigroORMConfig: Options<SqliteDriver> = defineConfig({
   },
   dbName: config.database.name,
   type: 'sqlite',
+  /**
+   * https://mikro-orm.io/docs/identity-map#why-is-request-context-needed
+   * This uses a global context since ops are not concurrent and there is no need for a request context.
+   */
+  allowGlobalContext: true,
 });
 
 export default MigroORMConfig;
