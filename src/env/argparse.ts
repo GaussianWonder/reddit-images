@@ -48,12 +48,12 @@ export const args = {
 
 if (parsedArgs.values.help) {
   console.log(
-    'Positional arguments are regarded as subreddits to scrape images from.',
-    'Options:',
-    '  --help:             Show this help message',
-    '  --debug, -d:        Enable debug mode',
-    '  --listing_type, -l: Specify the listing type to use',
-    '                      (hot, new, top, rising), default: hot',
+    'Positional arguments are regarded as subreddits to scrape images from.\n',
+    'Options:\n',
+    '  --help:             Show this help message\n',
+    '  --debug, -d:        Enable debug mode\n',
+    '  --listing_type, -l: Specify the listing type to use\n',
+    '                      (hot, new, top, rising), default: hot\n',
   );
   exit(0);
 }

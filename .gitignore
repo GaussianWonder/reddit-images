@@ -4,3 +4,4 @@ dist/*
 oauth.json
 *.sqlite
 **/.snapshot-*.json
+temp/*
