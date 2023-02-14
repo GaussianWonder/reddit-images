@@ -15,6 +15,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "outDir": "dist",
+    "types": ["reflect-metadata"],
     "lib": ["ES2022"]
   },
   "include": ["src/**/*"]

@@ -19,10 +19,12 @@ specifiers:
   eslint-plugin-import: ^2.27.5
   eslint-plugin-prettier: ^4.2.1
   image-type: ^5.2.0
+  inversify: ^6.0.1
   node-schedule: ^2.1.1
   prettier: ^2.8.4
   probe-image-size: ^7.2.3
   reddit-oauth-helper: ^0.3.2
+  reflect-metadata: ^0.1.13
   snoowrap: ^1.23.0
   sqlite3: ^5.1.4
   ts-node: ^10.9.1
@@ -39,9 +41,11 @@ dependencies:
   '@mikro-orm/sqlite': 5.6.9_xcd6omkwffhcfsos64cvpo3gj4
   dotenv: 16.0.3
   image-type: 5.2.0
+  inversify: 6.0.1
   node-schedule: 2.1.1
   probe-image-size: 7.2.3
   reddit-oauth-helper: 0.3.2
+  reflect-metadata: 0.1.13
   snoowrap: 1.23.0
   sqlite3: 5.1.4
   ts-node: 10.9.1_4bewfcp2iebiwuold25d6rgcsy
@@ -2088,6 +2092,10 @@ packages:
   /interpret/2.2.0:
     resolution: {integrity: sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==}
     engines: {node: '>= 0.10'}
+    dev: false
+
+  /inversify/6.0.1:
+    resolution: {integrity: sha512-B3ex30927698TJENHR++8FfEaJGqoWOgI6ZY5Ht/nLUsFCwHn6akbwtnUAPCgUepAnTpe2qHxhDNjoKLyz6rgQ==}
     dev: false
 
   /ip/2.0.0:

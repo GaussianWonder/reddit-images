@@ -14,7 +14,6 @@ export interface RawMedia {
   width: number;
   height: number;
   subreddit: string;
-  subreddit_id: string;
   upvote_ratio: number;
   ups: number;
   downs: number;
@@ -58,6 +57,7 @@ export class MediaEntity extends BaseEntity implements RawMedia {
 
   @Property({
     columnType: 'varchar(128)',
+    default: 'unknown',
   })
   mimetype = 'unknown';
 
@@ -81,11 +81,6 @@ export class MediaEntity extends BaseEntity implements RawMedia {
     columnType: 'varchar(128)',
   })
   subreddit!: string;
-
-  @Property({
-    columnType: 'varchar(128)',
-  })
-  subreddit_id!: string;
 
   @Property()
   upvote_ratio!: number;

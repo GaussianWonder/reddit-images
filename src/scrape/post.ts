@@ -65,7 +65,6 @@ export async function extractPostMedia(post: Submission): Promise<RawMedia[]> {
       post_id: post.id,
       post_hint: post.post_hint,
       subreddit: post.subreddit.display_name,
-      subreddit_id: post.subreddit_id,
       upvote_ratio: post.upvote_ratio,
       ups: post.ups,
       downs: post.downs,

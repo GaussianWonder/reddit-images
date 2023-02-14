@@ -1,6 +1,8 @@
+import 'reflect-metadata';
 import { args, selectedSubreddits } from './env/argparse';
 import config from './env/config';
-import { initScraper, Scraper } from './scrape/requester';
+import { initDI } from './inversify.config';
+import { initScraper, Scraper } from './scrape/scraper';
 
 if (args.debug) {
   console.log('Selected subreddits: ', selectedSubreddits);
@@ -9,11 +11,12 @@ if (args.debug) {
 
 let scraper: Scraper | null = null;
 
-async function promiseLand() {
+async function bootstrap() {
+  await initDI();
   scraper = await initScraper(selectedSubreddits);
 }
 
-promiseLand();
+bootstrap();
 
 process.on('SIGINT', () => {
   scraper?.cleanup();
