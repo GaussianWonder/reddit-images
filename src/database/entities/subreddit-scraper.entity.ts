@@ -6,8 +6,11 @@ export class SubredditScraperEntity extends BaseEntity {
   @Property()
   subreddit_name!: string;
 
-  @Property()
-  offset!: number;
+  @Property({ columnType: 'varchar(100)', nullable: true, default: null })
+  after!: string | null;
+
+  @Property({ columnType: 'varchar(10)', default: 'hot' })
+  listing_type: 'hot' | 'new' | 'top' | 'rising' = 'hot';
 
   @Property({ default: 100 })
   limit = 100;
@@ -28,5 +31,10 @@ export class SubredditScraperEntity extends BaseEntity {
   @Property()
   last_iteration = new Date();
 
-  [OptionalProps]?: 'limit' | 'iterations' | 'last_iteration';
+  [OptionalProps]?:
+    | 'limit'
+    | 'iterations'
+    | 'last_iteration'
+    | 'listing_type'
+    | 'after';
 }

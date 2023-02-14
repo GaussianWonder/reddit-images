@@ -1,24 +1,24 @@
 import { Entity, Property } from '@mikro-orm/core';
-import { ImagePreviewSource } from 'snoowrap/dist/objects/Submission';
 import { BaseEntity } from './base-entity';
-
-export type MediaSource = ImagePreviewSource & {
-  mimetype: string;
-};
 
 export interface RawMedia {
   url: string;
   post_id: string;
   post_hint: string;
-  mimetype: string;
-  width: number;
-  height: number;
+  mimetype: string | null;
+  width: number | null;
+  height: number | null;
   subreddit: string;
   upvote_ratio: number;
   ups: number;
   downs: number;
   score: number;
 }
+
+export type MediaSource = Pick<
+  RawMedia,
+  'url' | 'mimetype' | 'width' | 'height'
+>;
 
 @Entity()
 export class MediaEntity extends BaseEntity implements RawMedia {
@@ -59,17 +59,19 @@ export class MediaEntity extends BaseEntity implements RawMedia {
     columnType: 'varchar(128)',
     default: 'unknown',
   })
-  mimetype = 'unknown';
+  mimetype: string | null = 'unknown';
 
   @Property({
     columnType: 'integer',
+    nullable: true,
   })
-  width!: number;
+  width!: number | null;
 
   @Property({
     columnType: 'integer',
+    nullable: true,
   })
-  height!: number;
+  height!: number | null;
 
   /**
    * Subreddit name (e.g. 'pics')

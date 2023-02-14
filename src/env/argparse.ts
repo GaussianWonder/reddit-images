@@ -8,7 +8,6 @@ const parsedArgs = parseArgs({
   options: {
     help: {
       type: 'boolean',
-      short: 'h',
       default: false,
     },
     debug: {
@@ -16,18 +15,45 @@ const parsedArgs = parseArgs({
       short: 'd',
       default: false,
     },
+    listing_type: {
+      type: 'string',
+      short: 'l',
+      default: 'hot',
+    },
   },
   allowPositionals: true,
 });
 
+const availableListings: Array<'hot' | 'new' | 'top' | 'rising'> = [
+  'hot',
+  'new',
+  'top',
+  'rising',
+];
+const listingArg = parsedArgs.values.listing_type ?? 'hot';
+if (!['hot', 'new', 'top', 'rising'].includes(listingArg))
+  console.error(
+    `Unknown listing type ${listingArg}, choose one of ${availableListings.join(
+      ', ',
+    )}`,
+  );
+
 export default parsedArgs;
 
 export const selectedSubreddits = parsedArgs.positionals;
-export const args = parsedArgs.values;
+export const args = {
+  ...parsedArgs.values,
+  listing_type: listingArg as 'hot' | 'new' | 'top' | 'rising',
+};
 
 if (parsedArgs.values.help) {
   console.log(
     'Positional arguments are regarded as subreddits to scrape images from.',
+    'Options:',
+    '  --help:             Show this help message',
+    '  --debug, -d:        Enable debug mode',
+    '  --listing_type, -l: Specify the listing type to use',
+    '                      (hot, new, top, rising), default: hot',
   );
   exit(0);
 }

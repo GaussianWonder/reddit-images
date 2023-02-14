@@ -13,18 +13,27 @@ type MediaAlike = ImagePreview | ImagePreviewSource | Media | string;
 /**
  * Resolve any media structure to a common base interface containing the url, width, height and mimetype
  */
-async function resolveMediaAlike(value: MediaAlike): Promise<MediaSource[]> {
+async function resolveMediaAlike(
+  value: MediaAlike,
+  forceImageDetailsFetching = false,
+): Promise<MediaSource[]> {
   if (isURL(value)) {
     // valid is a valid url string
     //? this is not particularly useful since the ImagePreview structure contains the 'source' of posts which contain images
-    const details = await fastImageDetails(value);
-    return [{ url: value, ...details }];
+    if (forceImageDetailsFetching) {
+      const details = await fastImageDetails(value);
+      return [{ url: value, ...details }];
+    }
+    return [{ url: value, width: null, height: null, mimetype: null }];
   }
   if (isImageSource(value)) {
     // value is a valid ImagePreviewSource structure
     const { url, width, height } = value;
-    const mimetype = await fastImageMimeType(url);
-    return [{ url, width, height, mimetype }];
+    if (forceImageDetailsFetching) {
+      const mimetype = await fastImageMimeType(url);
+      return [{ url, width, height, mimetype }];
+    }
+    return [{ url, width, height, mimetype: null }];
   }
   if (isImagePreview(value)) {
     // value is a valid ImagePreview structure

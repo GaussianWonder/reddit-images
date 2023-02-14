@@ -14,10 +14,11 @@ let scraper: Scraper | null = null;
 async function bootstrap() {
   await initDI();
   scraper = await initScraper(selectedSubreddits);
+  await scraper.start();
 }
-
-bootstrap();
 
 process.on('SIGINT', () => {
   scraper?.cleanup();
 });
+
+bootstrap();
