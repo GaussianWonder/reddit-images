@@ -5,3 +5,4 @@ oauth.json
 *.sqlite
 **/.snapshot-*.json
 temp/*
+dataset/*

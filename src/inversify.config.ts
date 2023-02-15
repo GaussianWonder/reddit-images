@@ -4,6 +4,7 @@ import Snoowrap from 'snoowrap';
 import { initORM } from './database/driver';
 import { MediaEntity } from './database/entities/media.entity';
 import { SubredditScraperEntity } from './database/entities/subreddit-scraper.entity';
+import { DatasetFetcher } from './dataset/dataset';
 import TYPES from './di';
 import { acquireRequester } from './scrape/requester';
 import { Scraper, SubredditScraper } from './scrape/scraper';
@@ -28,6 +29,7 @@ export async function initDI() {
     .toConstantValue(orm.em.getRepository(MediaEntity));
   container.bind<Scraper>(Scraper).toSelf();
   container.bind<SubredditScraper>(SubredditScraper).toSelf();
+  container.bind<DatasetFetcher>(DatasetFetcher).toSelf();
 
   return container;
 }
@@ -53,3 +55,5 @@ export const getSubredditScraper = (subreddit: SubredditScraperEntity) => {
   subredditScraper.init(subreddit);
   return subredditScraper;
 };
+
+export const getDatasetFetcher = () => container.resolve(DatasetFetcher);

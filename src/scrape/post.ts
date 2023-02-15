@@ -5,7 +5,7 @@ import type {
   Media,
 } from 'snoowrap/dist/objects/Submission';
 import { MediaSource, RawMedia } from './../database/entities/media.entity';
-import { fastImageDetails } from './logic';
+import { fastImageDetails } from '../utils';
 import { isImagePreview, isImageSource, isURL } from './validation';
 
 type MediaAlike = ImagePreview | ImagePreviewSource | Media | string;

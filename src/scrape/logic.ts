@@ -1,14 +1,3 @@
-import probeImage from 'probe-image-size';
-
-export async function fastImageDetails(url: string) {
-  const { width, height, mime } = await probeImage(url);
-  return {
-    width,
-    height,
-    mimetype: mime,
-  };
-}
-
 export function abortablePromise<T>(
   signal: AbortSignal,
   promise: Promise<T>,
@@ -28,9 +17,9 @@ export function abortablePromise<T>(
 }
 
 export function makeAbortable<T>(
-  fun: Promise<T>,
+  promise: Promise<T>,
 ): [Promise<T>, AbortController] {
   const abortController = new AbortController();
-  const abortable = abortablePromise(abortController.signal, fun);
+  const abortable = abortablePromise(abortController.signal, promise);
   return [abortable, abortController];
 }

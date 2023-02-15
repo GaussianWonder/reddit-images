@@ -1,4 +1,4 @@
-import { Entity, Property } from '@mikro-orm/core';
+import { Entity, OptionalProps, Property } from '@mikro-orm/core';
 import { BaseEntity } from './base-entity';
 
 export interface RawMedia {
@@ -101,4 +101,12 @@ export class MediaEntity extends BaseEntity implements RawMedia {
 
   @Property()
   score!: number;
+
+  @Property({ default: false })
+  is_cached!: boolean;
+
+  @Property({ default: null, nullable: true })
+  size: number | null = null;
+
+  [OptionalProps]?: 'is_cached' | 'size';
 }

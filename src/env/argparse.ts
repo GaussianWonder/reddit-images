@@ -1,5 +1,7 @@
 import { exit } from 'node:process';
 import { parseArgs } from 'node:util';
+import fs from 'node:fs';
+import { assureDirectoryExists } from '../utils';
 
 export const DEFAULT_DB_NAME = 'reddit_media';
 export const DEFAULT_DB_PATH = `./${DEFAULT_DB_NAME}.db`;
@@ -19,6 +21,15 @@ const parsedArgs = parseArgs({
       type: 'string',
       short: 'l',
       default: 'hot',
+    },
+    download: {
+      type: 'boolean',
+      default: false,
+    },
+    dataset: {
+      type: 'string',
+      short: 'D',
+      default: './dataset',
     },
   },
   allowPositionals: true,
@@ -44,6 +55,7 @@ export const selectedSubreddits = parsedArgs.positionals;
 export const args = {
   ...parsedArgs.values,
   listing_type: listingArg as 'hot' | 'new' | 'top' | 'rising',
+  dataset: parsedArgs.values.dataset ?? './dataset',
 };
 
 if (parsedArgs.values.help) {
@@ -54,11 +66,15 @@ if (parsedArgs.values.help) {
     '  --debug, -d:        Enable debug mode\n',
     '  --listing_type, -l: Specify the listing type to use\n',
     '                      (hot, new, top, rising), default: hot\n',
+    '  --download:         Download the scraped images\n',
+    '  --dataset, -D:      Specify the dataset path\n',
   );
   exit(0);
 }
 
-if (selectedSubreddits.length < 1) {
+if (!args.download && selectedSubreddits.length < 1) {
   console.error('No subreddits specified, nothing to do!');
   exit(1);
 }
+
+if (args.dataset) assureDirectoryExists(args.dataset);
