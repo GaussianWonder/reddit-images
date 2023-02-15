@@ -6,3 +6,4 @@ oauth.json
 **/.snapshot-*.json
 temp/*
 dataset/*
+archive.*
