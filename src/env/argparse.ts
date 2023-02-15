@@ -1,6 +1,5 @@
 import { exit } from 'node:process';
 import { parseArgs } from 'node:util';
-import fs from 'node:fs';
 import { assureDirectoryExists } from '../utils';
 
 export const DEFAULT_DB_NAME = 'reddit_media';
