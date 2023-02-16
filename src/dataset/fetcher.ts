@@ -11,7 +11,7 @@ export const http = rateLimit(
   }),
   {
     maxRequests: 60,
-    perMilliseconds: config.requestInterval,
+    perMilliseconds: config.requestDelay,
   },
 );
 

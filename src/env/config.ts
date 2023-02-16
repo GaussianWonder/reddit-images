@@ -38,4 +38,4 @@ const config = ConfigSchema.parse({
   userAgent: envFile?.USER_AGENT,
 });
 
-export default { ...config, requestInterval: 1020 };
+export default { ...config, requestDelay: 1020 };

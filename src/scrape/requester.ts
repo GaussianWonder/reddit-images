@@ -13,7 +13,7 @@ export const acquireRequester = () => {
 
   const instanceConfig = instance.config({
     debug: args.debug,
-    requestDelay: config.requestInterval,
+    requestDelay: config.requestDelay,
   });
 
   if (args.debug) console.log('Requester config: ', instanceConfig);
